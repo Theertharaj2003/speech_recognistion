@@ -1,0 +1,3 @@
+const BASE=import.meta.env.VITE_API_BASE||'http://127.0.0.1:8000';
+async function req(path,options={}){const r=await fetch(BASE+path,{headers:{'Content-Type':'application/json',...(options.headers||{})},...options});if(!r.ok){let msg=`Request failed (${r.status})`;try{msg=(await r.json()).detail||msg}catch{}throw Error(msg)}return r.json()}
+export const api={subjects:()=>req('/api/subjects'),lessons:id=>req(`/api/subjects/${id}/lessons`),questions:id=>req(`/api/subjects/${id}/questions`),answer:data=>req('/api/quiz/answer',{method:'POST',body:JSON.stringify(data)}),recommend:id=>req(`/api/recommendations/${id}`),analytics:()=>req('/api/analytics'),history:()=>req('/api/history'),reset:()=>req('/api/demo/reset',{method:'DELETE'})};
